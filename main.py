@@ -1,26 +1,24 @@
-# This example requires the 'message_content' privileged intents
+from aiogram import Bot, Dispatcher, executor, types
+from aiogram.types.web_app_info import WebAppInfo
 
-import os
-import discord
-from discord.ext import commands
-
-
-intents = discord.Intents.default()
-intents.message_content = True
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = Bot('6301830254:AAE_pcjQUizSpOm7fJ21UHxroUgBWKxcOLg')
+dp = Dispatcher(bot)
 
 
-@bot.event
-async def on_ready():
-    print(f"Logged in as {bot.user}")
-
-@bot.command()
-async def ping(ctx):
-    await ctx.send('pong')
-
-@bot.command()
-async def hello(ctx):
-    await ctx.send("Choo choo! 🚅")
+@dp.message_handler(commands=['start'])
+async def start(message: types.Message):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton('Knopka ustiga bosing', web_app=WebAppInfo(url='https://bestburgerandijon.netlify.app/')))
+    await message.answer('Buyurtma berish uchun tanlang', reply_markup=markup)
 
 
-bot.run(os.environ["DISCORD_TOKEN"])
+@dp.message_handler()
+async def help(message: types.Message):
+    markup = types.ReplyKeyboardMarkup()
+    markup.add(types.KeyboardButton('Knopka ustiga basing', web_app=WebAppInfo(url='https://bestburgerandijon.netlify.app/')))
+    await message.answer('Offline holat un', reply_markup=markup)
+
+
+
+
+executor.start_polling(dp)
